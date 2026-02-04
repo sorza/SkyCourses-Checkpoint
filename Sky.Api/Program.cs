@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sky.Api
 {
@@ -6,17 +8,36 @@ namespace Sky.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+           
+            if (builder.Environment.IsDevelopment())
+            {               
+                builder.Services.AddDbContext<Infra.Data.AppDbContext>(options =>
+                    options.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection")));
+            }
+            else
+            {               
+                builder.Services.AddDbContext<Infra.Data.AppDbContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            }
 
-            // Add services to the container.
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 8;
+            })
+             .AddEntityFrameworkStores<Infra.Data.AppDbContext>()
+             .AddDefaultTokenProviders();
+
             builder.Services.AddAuthorization();
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
