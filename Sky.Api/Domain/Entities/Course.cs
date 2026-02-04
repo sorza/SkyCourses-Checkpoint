@@ -14,6 +14,8 @@
 
         #region Constructors
 
+        private Course() { }
+
         private Course(string title, string description, string category, int workload) 
         {
             Title = title;

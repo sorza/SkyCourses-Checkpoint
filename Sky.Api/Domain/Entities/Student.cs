@@ -10,7 +10,9 @@ namespace Sky.Api.Domain.Entities
         public DateTime RegistratedAt { get; set; }
         #endregion
 
-        #region Constructor
+        #region Constructors
+        
+        private Student() { }
 
         private Student(Email email)
         {
