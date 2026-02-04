@@ -27,6 +27,23 @@ namespace Sky.Api
                 options.Password.RequireUppercase = true;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
+
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); 
+                options.Lockout.MaxFailedAccessAttempts = 5; 
+                options.Lockout.AllowedForNewUsers = true;                
+
+                if(builder.Environment.IsProduction())
+                {
+                    options.SignIn.RequireConfirmedEmail = true;
+                    options.SignIn.RequireConfirmedPhoneNumber = true;
+                    options.SignIn.RequireConfirmedAccount = true;
+                }
+                else
+                {
+                    options.SignIn.RequireConfirmedEmail = false;
+                    options.SignIn.RequireConfirmedPhoneNumber = false;
+                    options.SignIn.RequireConfirmedAccount = false;
+                }
             })
              .AddEntityFrameworkStores<Infra.Data.AppDbContext>()
              .AddDefaultTokenProviders();
@@ -46,6 +63,7 @@ namespace Sky.Api
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
