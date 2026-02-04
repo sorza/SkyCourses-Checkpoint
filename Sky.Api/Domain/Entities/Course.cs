@@ -10,6 +10,7 @@
         public string Category { get; private set; }
         public int Workload { get; private set; }
         public DateTime CreatedAt { get; private set; }
+        public ICollection<Enrollment> Enrollments { get; private set; } = new List<Enrollment>();
         #endregion
 
         #region Constructors
