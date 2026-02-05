@@ -6,6 +6,7 @@ namespace Sky.Api.Application.Services
 {
     public interface IUserService
     {
-        Task<Response<UserResponse>> Register(UserRequest userDto, CancellationToken cancellationToken = default);       
+        Task<Response<UserResponse>> Register(UserRequest request, CancellationToken cancellationToken = default);
+        Task<Response<AuthResponse>> Login(AuthRequest request, CancellationToken cancellationToken = default);
     }
 }

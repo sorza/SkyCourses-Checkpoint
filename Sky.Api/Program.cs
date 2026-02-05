@@ -100,7 +100,11 @@ namespace Sky.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            #region Registrando serviços 
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+
+            #endregion
 
             var app = builder.Build();
 

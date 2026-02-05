@@ -8,12 +8,10 @@ namespace Sky.Api.Endpoints.Users
     public class Register : IEndpoint
     {
         public static void Map(IEndpointRouteBuilder app)
-        => app.MapPost("/users", HandleAsync)
+        => app.MapPost("/", HandleAsync)
             .WithName("Registro")
             .WithSummary("Registra um novo usuário.")
-            .WithDescription("Registra um novo usuário na aplicação.")
-            .Produces<Response<UserResponse>>(201)
-            .Produces(400);
+            .WithDescription("Registra um novo usuário na aplicação.");
 
         private static async Task<IResult> HandleAsync(IUserService service, UserRequest userDto, CancellationToken cancellationToken = default)
         {
