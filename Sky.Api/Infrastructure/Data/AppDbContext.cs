@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Sky.Api.Domain.Entities;
 
-namespace Sky.Api.Infra.Data
+namespace Sky.Api.Infrastructure.Data
 {
     public class AppDbContext : IdentityDbContext
     {

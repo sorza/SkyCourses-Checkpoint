@@ -3,7 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sky.Api.Infra.Data;
+using Sky.Api.Infrastructure.Data;
 
 #nullable disable
 

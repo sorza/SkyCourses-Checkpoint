@@ -1,6 +1,7 @@
-﻿using Sky.Api.Application.Dto;
+﻿using Sky.Api.Application.Requests.Users;
 using Sky.Api.Application.Responses;
-using Sky.Api.Application.Services.Abstractions;
+using Sky.Api.Application.Responses.Users;
+using Sky.Api.Application.Services;
 
 namespace Sky.Api.Endpoints.Users
 {
@@ -11,10 +12,10 @@ namespace Sky.Api.Endpoints.Users
             .WithName("Registro")
             .WithSummary("Registra um novo usuário.")
             .WithDescription("Registra um novo usuário na aplicação.")
-            .Produces<Response<ReadUserDto>>(201)
+            .Produces<Response<UserResponse>>(201)
             .Produces(400);
 
-        private static async Task<IResult> HandleAsync(IUserService service, CreateUserDto userDto, CancellationToken cancellationToken = default)
+        private static async Task<IResult> HandleAsync(IUserService service, UserRequest userDto, CancellationToken cancellationToken = default)
         {
            var result = await service.Register(userDto, cancellationToken);
 

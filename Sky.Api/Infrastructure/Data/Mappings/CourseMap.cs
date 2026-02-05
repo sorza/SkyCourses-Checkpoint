@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sky.Api.Domain.Entities;
 
-namespace Sky.Api.Infra.Data.Mappings
+namespace Sky.Api.Infrastructure.Data.Mappings
 {
     public class CourseMap : IEntityTypeConfiguration<Course>
     {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sky.Api.Domain.Entities;
 using Sky.Api.Domain.ValueObjects;
 
-namespace Sky.Api.Infra.Data.Mappings
+namespace Sky.Api.Infrastructure.Data.Mappings
 {
     public class StudentMap : IEntityTypeConfiguration<Student>
     {

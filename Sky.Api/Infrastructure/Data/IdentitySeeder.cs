@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Data;
 
-namespace Sky.Api.Infra.Data
+namespace Sky.Api.Infrastructure.Data
 {
     public static class IdentitySeeder
     {

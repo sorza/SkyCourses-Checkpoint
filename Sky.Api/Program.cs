@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Sky.Api.Application.Services.Abstractions;
-using Sky.Api.Application.Services.Implementation;
+using Sky.Api.Application.Services;
 using Sky.Api.Endpoints;
-using Sky.Api.Infra.Data;
+using Sky.Api.Infrastructure.Data;
+using Sky.Api.Infrastructure.Services;
 using System.Text;
 
 namespace Sky.Api
@@ -19,12 +19,12 @@ namespace Sky.Api
             #region Registrando o DbContext
             if (builder.Environment.IsDevelopment())
             {               
-                builder.Services.AddDbContext<Infra.Data.AppDbContext>(options =>
+                builder.Services.AddDbContext<AppDbContext>(options =>
                     options.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection")));
             }
             else
             {               
-                builder.Services.AddDbContext<Infra.Data.AppDbContext>(options =>
+                builder.Services.AddDbContext<AppDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             }
             #endregion
@@ -58,7 +58,7 @@ namespace Sky.Api
                     options.SignIn.RequireConfirmedAccount = false;
                 }
             })
-             .AddEntityFrameworkStores<Infra.Data.AppDbContext>()
+             .AddEntityFrameworkStores<AppDbContext>()
              .AddDefaultTokenProviders();
             #endregion
 
