@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Sky.Api.Application.Services.Abstractions;
+using Sky.Api.Application.Services.Implementation;
+using Sky.Api.Endpoints;
 using Sky.Api.Infra.Data;
 using System.Text;
 
@@ -12,7 +15,8 @@ namespace Sky.Api
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-           
+
+            #region Registrando o DbContext
             if (builder.Environment.IsDevelopment())
             {               
                 builder.Services.AddDbContext<Infra.Data.AppDbContext>(options =>
@@ -23,6 +27,7 @@ namespace Sky.Api
                 builder.Services.AddDbContext<Infra.Data.AppDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             }
+            #endregion
 
             #region Identity Configurations
 
@@ -95,6 +100,8 @@ namespace Sky.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<IUserService, UserService>();
+
             var app = builder.Build();
 
             #region Database Seed
@@ -120,17 +127,23 @@ namespace Sky.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+                       
 
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
+            #region Endpoints
 
             app.MapGet("/health", () =>
             {
                 return "Healthy";
             });
+
+            app.MapEndpoints();
+
+            #endregion          
 
             app.Run();
         }
