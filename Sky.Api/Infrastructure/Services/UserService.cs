@@ -5,7 +5,7 @@ using Sky.Api.Application.Responses;
 using Sky.Api.Application.Responses.Users;
 using Sky.Api.Domain.ValueObjects;
 
-namespace Sky.Api.Infrastructure.Implementation
+namespace Sky.Api.Infrastructure.Services
 {
     public class UserService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ITokenService tokenService) : IUserService
     {

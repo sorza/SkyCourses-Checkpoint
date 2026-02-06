@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Sky.Api.Infrastructure.Implementation
+namespace Sky.Api.Infrastructure.Services
 {
     public class TokenService(IConfiguration configuration) : ITokenService
     {

@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Sky.Api.Application.Interfaces;
 using Sky.Api.Endpoints;
 using Sky.Api.Infrastructure.Data;
-using Sky.Api.Infrastructure.Implementation;
+using Sky.Api.Infrastructure.Services;
 using System.Text;
 
 namespace Sky.Api
