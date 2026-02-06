@@ -2,7 +2,7 @@
 using Sky.Api.Application.Responses;
 using Sky.Api.Application.Responses.Users;
 
-namespace Sky.Api.Application.Services
+namespace Sky.Api.Application.Interfaces
 {
     public interface IUserService
     {

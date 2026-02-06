@@ -1,10 +1,10 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using Sky.Api.Application.Services;
+using Sky.Api.Application.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Sky.Api.Infrastructure.Services
+namespace Sky.Api.Infrastructure.Implementation
 {
     public class TokenService(IConfiguration configuration) : ITokenService
     {

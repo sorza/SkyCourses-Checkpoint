@@ -1,6 +1,6 @@
 ﻿
+using Sky.Api.Application.Interfaces;
 using Sky.Api.Application.Requests.Users;
-using Sky.Api.Application.Services;
 
 namespace Sky.Api.Endpoints.Users
 {

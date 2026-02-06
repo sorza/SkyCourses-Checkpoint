@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Sky.Api.Application.Services;
+using Sky.Api.Application.Interfaces;
 using Sky.Api.Endpoints;
 using Sky.Api.Infrastructure.Data;
-using Sky.Api.Infrastructure.Services;
+using Sky.Api.Infrastructure.Implementation;
 using System.Text;
 
 namespace Sky.Api

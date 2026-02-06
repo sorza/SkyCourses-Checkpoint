@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Sky.Api.Application.Interfaces;
 using Sky.Api.Application.Requests.Users;
 using Sky.Api.Application.Responses;
 using Sky.Api.Application.Responses.Users;
-using Sky.Api.Application.Services;
 using Sky.Api.Domain.ValueObjects;
 
-namespace Sky.Api.Infrastructure.Services
+namespace Sky.Api.Infrastructure.Implementation
 {
     public class UserService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ITokenService tokenService) : IUserService
     {

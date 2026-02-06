@@ -1,4 +1,4 @@
-﻿namespace Sky.Api.Application.Services
+﻿namespace Sky.Api.Application.Interfaces
 {
     public interface ITokenService
     {
