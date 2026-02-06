@@ -1,9 +1,10 @@
-﻿namespace Sky.Api.Domain.Entities
+﻿using Sky.Api.Domain.Definitions;
+
+namespace Sky.Api.Domain.Entities
 {
-    public class Enrollment
+    public class Enrollment : Entity
     {
         #region Properties
-        public int Id { get; }
         public Student Student { get; private set; }
         public Course Course { get; private set; }
         public DateTime EnrolledAt { get; private set; }

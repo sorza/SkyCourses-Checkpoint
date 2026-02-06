@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Sky.Api.Domain.Definitions;
 using Sky.Api.Domain.ValueObjects;
 
 namespace Sky.Api.Domain.Entities
 {
-    public class Student
+    public class Student : Entity
     {
         #region Properties
-        public int Id { get; }
         public string UserId { get; private set; }
         public Email Email { get; private set; }
         public DateTime RegistratedAt { get; set; }
