@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Identity;
 using Sky.Api.Application.Interfaces;
 using Sky.Api.Application.Requests.Users;
 using Sky.Api.Application.Responses;
 using Sky.Api.Application.Responses.Users;
+using Sky.Api.Domain.Entities;
 using Sky.Api.Domain.ValueObjects;
 
 namespace Sky.Api.Infrastructure.Services
@@ -43,15 +45,32 @@ namespace Sky.Api.Infrastructure.Services
 
             var roles = await userManager.GetRolesAsync(user);
 
-            var token = tokenService.GenerateToken(user.Id, user.Email!, roles);           
+            var token = tokenService.GenerateToken(user.Id, user.Email!, roles);            
+            var refreshToken = tokenService.GenerateRefreshToken();
 
-            var response = new AuthResponse
-            (
-                user.Id,
-                user.Email!,
-                token,                
-                roles
-            );
+            var accessTokenExpiry = DateTime.UtcNow.AddMinutes(30);
+            var refreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+
+            var refreshTokenEntity = new RefreshToken
+            {
+                Token = refreshToken,
+                UserId = user.Id,
+                ExpiresAt = refreshTokenExpiry,
+                CreatedAt = DateTime.UtcNow,
+                IsRevoked = false
+            };
+
+            await tokenService.SaveRefreshToken(refreshTokenEntity, cancellationToken);
+
+            var response = new AuthResponse(
+                    user.Id,
+                    user.Email!,
+                    token,
+                    refreshToken,
+                    accessTokenExpiry,
+                    refreshTokenExpiry,
+                    roles
+                );
 
             return new Response<AuthResponse>(response, 200, "Login realizado com sucesso.");
 

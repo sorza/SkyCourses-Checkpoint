@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Sky.Api.Application.Interfaces;
+using Sky.Api.Domain.Entities;
 using Sky.Api.Endpoints;
 using Sky.Api.Infrastructure.Data;
+using Sky.Api.Infrastructure.Repositories;
 using Sky.Api.Infrastructure.Services;
 using System.Text;
 
@@ -100,10 +102,14 @@ namespace Sky.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            #region Registrando serviços 
+            #region Registro de Serviços 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
 
+            #endregion
+
+            #region Registro de Repositories
+            builder.Services.AddScoped<IRepository<RefreshToken>, Repository<RefreshToken>>();
             #endregion
 
             var app = builder.Build();

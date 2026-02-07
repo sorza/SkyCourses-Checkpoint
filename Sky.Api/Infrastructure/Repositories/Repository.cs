@@ -2,6 +2,7 @@
 using Sky.Api.Application.Interfaces;
 using Sky.Api.Domain.Definitions;
 using Sky.Api.Infrastructure.Data;
+using System.Linq.Expressions;
 
 namespace Sky.Api.Infrastructure.Repositories
 {
@@ -28,17 +29,14 @@ namespace Sky.Api.Infrastructure.Repositories
         public async Task<IEnumerable<T>?> GetAllAsync(CancellationToken cancellationToken = default)
             => await _dbSet.AsNoTracking().ToListAsync(cancellationToken).ContinueWith(t=> (IEnumerable<T>) t.Result, cancellationToken);
 
-        public Task<IEnumerable<T>?> GetAllAsync(Func<T, bool> predicate, CancellationToken cancellationToken = default)
-        {
-            var result =  _dbSet.AsNoTracking().Where(predicate).ToList();           
-            return Task.FromResult(result?.AsEnumerable());
-        }
+        public async Task<IEnumerable<T>?> GetAllAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+        => await _dbSet.AsNoTracking().Where(predicate).ToListAsync(cancellationToken).ContinueWith(t => (IEnumerable<T>)t.Result, cancellationToken);
 
         public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         => await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
-        public async Task<T?> GetAsync(Func<T, bool> predicate, CancellationToken cancellationToken = default)
-        => await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => predicate(e), cancellationToken);
+        public async Task<T?> GetAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+        => await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken);
 
         public Task UpdateAsync(T entidade, CancellationToken cancellationToken = default)
         {

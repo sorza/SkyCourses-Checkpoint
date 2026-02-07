@@ -9,7 +9,9 @@
             endpoints.MapGroup("v1/users")
                 .WithTags("Usuários")
                 .MapEndpoint<Users.Register>()
-                .MapEndpoint<Users.Login>();
+                .MapEndpoint<Users.Login>()
+                .MapEndpoint<Users.RefreshToken>();
+
         }
 
         private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)

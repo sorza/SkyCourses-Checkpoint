@@ -4,6 +4,9 @@
         string UserId,
         string Email,
         string Token,
+        string RefreshToken, 
+        DateTime TokenExpiresAt,
+        DateTime RefreshTokenExpiresAt,
         IEnumerable<string> Roles
     );
 }
