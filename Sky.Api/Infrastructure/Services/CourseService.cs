@@ -8,10 +8,10 @@ namespace Sky.Api.Infrastructure.Services
 {
     public class CourseService(IRepository<Course> repository) : ICourseService
     {
-        public async Task<Response<CreateCourseResponse>> CreateCourseAsync(CourseRequest request, CancellationToken cancellationToken = default)
+        public async Task<Response<CourseResponse>> CreateCourseAsync(CreateCourseRequest request, CancellationToken cancellationToken = default)
         {
             if (request is null)
-                return new Response<CreateCourseResponse>(null, 400, "Preencha as informações do curso.");
+                return new Response<CourseResponse>(null, 400, "Preencha as informações do curso.");
 
             Course course;
 
@@ -21,12 +21,12 @@ namespace Sky.Api.Infrastructure.Services
             }
             catch(ArgumentException ex)
             {
-                return new Response<CreateCourseResponse>(null, 400, ex.Message);
+                return new Response<CourseResponse>(null, 400, ex.Message);
             }           
 
             await repository.CreateAsync(course, cancellationToken);    
 
-            var response = new CreateCourseResponse
+            var response = new CourseResponse
             (
                 course.Id,
                 course.Title,
@@ -36,7 +36,7 @@ namespace Sky.Api.Infrastructure.Services
                 course.CreatedAt
             );
 
-            return new Response<CreateCourseResponse>(response,201,"Curso cadastrado com sucesso!");
+            return new Response<CourseResponse>(response,201,"Curso cadastrado com sucesso!");
 
         }
 
@@ -55,7 +55,7 @@ namespace Sky.Api.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<Response<CourseResponse>> UpdateCourseAsync(int id, CourseRequest request, CancellationToken cancellationToken = default)
+        public Task<Response<CourseResponse>> UpdateCourseAsync(int id, CreateCourseRequest request, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

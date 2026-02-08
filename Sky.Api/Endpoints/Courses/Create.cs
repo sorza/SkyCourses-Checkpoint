@@ -17,11 +17,11 @@ namespace Sky.Api.Endpoints.Courses
             .RequireAuthorization(policy => policy.RequireRole("Admin","Instructor"));
 
         public static async Task<Results<
-            Created<CreateCourseResponse>,
-            BadRequest<Response<CreateCourseResponse>>
+            Created<CourseResponse>,
+            BadRequest<Response<CourseResponse>>
             >>
             HandleAsync(
-            CourseRequest request,
+            CreateCourseRequest request,
             ICourseService service,
             CancellationToken cancellationToken = default
             )
