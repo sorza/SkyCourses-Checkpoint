@@ -8,12 +8,12 @@ namespace Sky.Api.Infrastructure.Services
 {
     public class CourseService(IRepository<Course> repository) : ICourseService
     {
-        public async Task<Response<CourseResponse>> CreateCourseAsync(CourseRequest request, CancellationToken cancellationToken = default)
+        public async Task<Response<CreateCourseResponse>> CreateCourseAsync(CourseRequest request, CancellationToken cancellationToken = default)
         {
             if (request is null)
-                return new Response<CourseResponse>(null, 400, "Preencha as informações do curso.");
+                return new Response<CreateCourseResponse>(null, 400, "Preencha as informações do curso.");
 
-            Course course = null!;
+            Course course;
 
             try
             {
@@ -21,28 +21,22 @@ namespace Sky.Api.Infrastructure.Services
             }
             catch(ArgumentException ex)
             {
-                return new Response<CourseResponse>(null, 400, ex.Message);
-            }
+                return new Response<CreateCourseResponse>(null, 400, ex.Message);
+            }           
 
-            if (course is null)
-                return new Response<CourseResponse>(null, 500,"Houve um erro no cadastro do curso. Tente novamente!");
+            await repository.CreateAsync(course, cancellationToken);    
 
-            await repository.CreateAsync(course);
-            
-            course = await repository.GetAsync(x => x.CreatedAt >= course.CreatedAt, cancellationToken);
-
-            var response = new CourseResponse
+            var response = new CreateCourseResponse
             (
-                course!.Id,
+                course.Id,
                 course.Title,
                 course.Description,
                 course.Category,
                 course.Workload,
-                course.CreatedAt,
-                course.Enrollments
+                course.CreatedAt
             );
 
-            return new Response<CourseResponse>(response,201,"Curso cadastrado com sucesso!");
+            return new Response<CreateCourseResponse>(response,201,"Curso cadastrado com sucesso!");
 
         }
 

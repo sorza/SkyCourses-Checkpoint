@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Sky.Api.Application.Interfaces;
 using Sky.Api.Domain.Entities;
 using Sky.Api.Endpoints;
@@ -98,9 +99,50 @@ namespace Sky.Api
             #endregion
 
             builder.Services.AddAuthorization();
-
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+            #region Configurações do Swagger
+            builder.Services.AddSwaggerGen(options =>
+            {               
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Sky Courses API",
+                    Version = "v1",
+                    Description = "API para gerenciamento de cursos online",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Sky Courses",
+                        Email = "contato@skycourses.com"
+                    }
+                });
+               
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Insira o token JWT"
+                });
+                               
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
+
+            #endregion
 
             #region Registro de Serviços 
             builder.Services.AddScoped<IUserService, UserService>();
@@ -139,8 +181,7 @@ namespace Sky.Api
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
-                       
+            }                       
 
             app.UseHttpsRedirection();
 
