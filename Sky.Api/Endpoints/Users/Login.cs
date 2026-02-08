@@ -1,6 +1,10 @@
 ﻿
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Sky.Api.Application.Interfaces;
 using Sky.Api.Application.Requests.Users;
+using Sky.Api.Application.Responses;
+using Sky.Api.Application.Responses.Users;
 
 namespace Sky.Api.Endpoints.Users
 {
@@ -11,6 +15,10 @@ namespace Sky.Api.Endpoints.Users
             .WithName("Login")
             .WithSummary("Realiza autenticação do usuário.")
             .WithDescription("Autentica o usuário e retorna um token JWT.")
+            .Produces<Ok<AuthResponse>>(200)
+            .Produces<BadRequest<Response<AuthResponse>>>(400)
+            .Produces<UnauthorizedHttpResult>(401)
+            .Produces<ForbidHttpResult>(403)
             .AllowAnonymous();
 
         private static async Task<IResult> HandleAsync(IUserService service, AuthRequest authDto, CancellationToken cancellationToken = default)
@@ -21,7 +29,7 @@ namespace Sky.Api.Endpoints.Users
             {
                 200 => TypedResults.Ok(result),
                 401 => TypedResults.Unauthorized(),
-                423 => TypedResults.Json(result, statusCode: 423),
+                403 => TypedResults.Json(result, statusCode: 403),
                 _ => TypedResults.BadRequest(result)
             };
         }

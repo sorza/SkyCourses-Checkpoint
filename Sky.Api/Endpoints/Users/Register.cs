@@ -1,4 +1,5 @@
-﻿using Sky.Api.Application.Interfaces;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Sky.Api.Application.Interfaces;
 using Sky.Api.Application.Requests.Users;
 using Sky.Api.Application.Responses;
 using Sky.Api.Application.Responses.Users;
@@ -11,7 +12,10 @@ namespace Sky.Api.Endpoints.Users
         => app.MapPost("/", HandleAsync)
             .WithName("Registro")
             .WithSummary("Registra um novo usuário.")
-            .WithDescription("Registra um novo usuário na aplicação.");
+            .WithDescription("Registra um novo usuário na aplicação.")
+            .Produces<Created<UserResponse>>(201)
+            .Produces<BadRequest<Response<UserResponse>>>(400)
+            .AllowAnonymous();
 
         private static async Task<IResult> HandleAsync(IUserService service, UserRequest userDto, CancellationToken cancellationToken = default)
         {

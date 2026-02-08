@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Sky.Api.Application.Interfaces;
 using Sky.Api.Application.Requests.Users;
@@ -14,6 +15,8 @@ namespace Sky.Api.Endpoints.Users
         => app.MapPost("/refresh-token", HandleAsync)
             .WithName("RefreshToken")
             .WithSummary("Atualiza o access token usando refresh token.")
+            .Produces<Ok<AuthResponse>>(200)
+            .Produces<UnauthorizedHttpResult>(401)
             .AllowAnonymous();
 
         private static async Task<IResult> HandleAsync(

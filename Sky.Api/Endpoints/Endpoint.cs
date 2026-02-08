@@ -16,7 +16,6 @@
                 .WithTags("Cursos")
                 .MapEndpoint<Courses.Create>()
                 .MapEndpoint<Courses.GetAll>();
-
         }
 
         private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
