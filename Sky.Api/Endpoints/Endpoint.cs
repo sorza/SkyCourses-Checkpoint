@@ -12,6 +12,10 @@
                 .MapEndpoint<Users.Login>()
                 .MapEndpoint<Users.RefreshToken>();
 
+            endpoints.MapGroup("v1/courses")
+                .WithTags("Cursos")
+                .MapEndpoint<Courses.Create>();
+
         }
 
         private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)

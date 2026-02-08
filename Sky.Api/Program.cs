@@ -105,11 +105,14 @@ namespace Sky.Api
             #region Registro de Serviços 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<ICourseService, CourseService>();
 
             #endregion
 
             #region Registro de Repositories
             builder.Services.AddScoped<IRepository<RefreshToken>, Repository<RefreshToken>>();
+            builder.Services.AddScoped<IRepository<Course>, Repository<Course>>();
+
             #endregion
 
             var app = builder.Build();
