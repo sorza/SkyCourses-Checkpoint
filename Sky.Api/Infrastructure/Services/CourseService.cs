@@ -45,9 +45,70 @@ namespace Sky.Api.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<PagedResponse<IEnumerable<CourseResponse>>> GetAllCoursesAsync(CancellationToken cancellationToken = default)
+        public async Task<PagedResponse<IEnumerable<CourseResponse>>> GetAllCoursesAsync(GetCoursesRequest request, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            if (request is null)
+                return new PagedResponse<IEnumerable<CourseResponse>>(null, 400, "Parâmetros de pesquisa inválidos");
+           
+            if (request.PageNumber < 1)
+                return new PagedResponse<IEnumerable<CourseResponse>>(null, 400, "O número da página deve ser maior que zero.");
+
+            if (request.PageSize < 1 || request.PageSize > 100)
+                return new PagedResponse<IEnumerable<CourseResponse>>(null, 400, "O tamanho da página deve estar entre 1 e 100.");
+
+            IEnumerable<Course>? courses;
+
+            try
+            {               
+                if (!string.IsNullOrWhiteSpace(request.Category))
+                {
+                    courses = await repository.GetAllAsync(
+                        c => c.Category.ToLower() == request.Category.ToLower(),
+                        cancellationToken
+                    );
+                }
+                else
+                {                  
+                    courses = await repository.GetAllAsync(cancellationToken);
+                }
+
+                if (courses is null || !courses.Any())
+                    return new PagedResponse<IEnumerable<CourseResponse>>(
+                        new List<CourseResponse>(),
+                        200,
+                        "Nenhum curso encontrado."
+                    );
+              
+                var totalRecords = courses.Count();
+              
+                var pagedCourses = courses
+                    .Skip((request.PageNumber - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .Select(c => new CourseResponse(
+                        c.Id,
+                        c.Title,
+                        c.Description,
+                        c.Category,
+                        c.Workload,
+                        c.CreatedAt
+                    ))
+                    .ToList();
+
+                return new PagedResponse<IEnumerable<CourseResponse>>(
+                    pagedCourses,
+                    totalRecords,
+                    request.PageNumber,
+                    request.PageSize
+                );
+            }
+            catch (Exception ex)
+            {
+                return new PagedResponse<IEnumerable<CourseResponse>>(
+                    null,
+                    500,
+                    $"Erro ao buscar cursos: {ex.Message}"
+                );
+            }
         }
 
         public Task<Response<CourseResponse>> GetCourseByIdAsync(int id, CancellationToken cancellationToken = default)

@@ -14,7 +14,8 @@
 
             endpoints.MapGroup("v1/courses")
                 .WithTags("Cursos")
-                .MapEndpoint<Courses.Create>();
+                .MapEndpoint<Courses.Create>()
+                .MapEndpoint<Courses.GetAll>();
 
         }
 

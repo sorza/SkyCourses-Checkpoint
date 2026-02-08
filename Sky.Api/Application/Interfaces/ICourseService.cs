@@ -8,7 +8,7 @@ namespace Sky.Api.Application.Interfaces
     {
         Task<Response<CourseResponse>> CreateCourseAsync(CreateCourseRequest request, CancellationToken cancellationToken = default);
         Task<Response<CourseResponse>> GetCourseByIdAsync(int id, CancellationToken cancellationToken = default);
-        Task<PagedResponse<IEnumerable<CourseResponse>>> GetAllCoursesAsync(CancellationToken cancellationToken = default);
+        Task<PagedResponse<IEnumerable<CourseResponse>>> GetAllCoursesAsync(GetCoursesRequest request, CancellationToken cancellationToken = default);
         Task<Response<CourseResponse>> UpdateCourseAsync(int id, CreateCourseRequest request, CancellationToken cancellationToken = default);
         Task<Response<bool>> DeleteCourseAsync(int id, CancellationToken cancellationToken = default);
     }
