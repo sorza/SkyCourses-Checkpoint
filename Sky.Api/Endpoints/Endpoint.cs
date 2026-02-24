@@ -15,7 +15,9 @@
             endpoints.MapGroup("v1/courses")
                 .WithTags("Cursos")
                 .MapEndpoint<Courses.Create>()
-                .MapEndpoint<Courses.GetAll>();
+                .MapEndpoint<Courses.GetAll>()
+                .MapEndpoint<Courses.GetById>()
+                .MapEndpoint<Courses.Update>();
         }
 
         private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)

@@ -111,14 +111,53 @@ namespace Sky.Api.Infrastructure.Services
             }
         }
 
-        public Task<Response<CourseResponse>> GetCourseByIdAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<Response<CourseResponse>> GetCourseByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var course = await repository.GetByIdAsync(id, cancellationToken);
+
+            if (course is null)
+                return new Response<CourseResponse>(null, 404, "Curso não encontrado.");
+
+            return new Response<CourseResponse>(
+                new CourseResponse
+                (
+                    course.Id,
+                    course.Title,
+                    course.Description,
+                    course.Category,
+                    course.Workload,
+                    course.CreatedAt
+                ),
+                200
+            );
+
         }
 
-        public Task<Response<CourseResponse>> UpdateCourseAsync(int id, CreateCourseRequest request, CancellationToken cancellationToken = default)
+        public async Task<Response<CourseResponse>> UpdateCourseAsync(int id, CreateCourseRequest request, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var course = await repository.GetByIdAsync(id, cancellationToken);
+
+            if (course is null)
+                return new Response<CourseResponse>(null, 404, "Curso não encontrado.");
+
+            var newCourse = Course.Create(request.Title, request.Description, request.Category, request.Workload);
+
+            course.Update(newCourse);
+
+            await repository.UpdateAsync(course, cancellationToken);
+
+            return new Response<CourseResponse>(
+                new CourseResponse
+                (
+                    course.Id,
+                    course.Title,
+                    course.Description,
+                    course.Category,
+                    course.Workload,
+                    course.CreatedAt
+                ),
+                200
+            );
         }
     }
 }

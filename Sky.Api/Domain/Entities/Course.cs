@@ -50,6 +50,29 @@ namespace Sky.Api.Domain.Entities
 
         #endregion
 
+        #region Methods
+
+        public void Update(Course course)
+        {
+            if(course == null)
+                throw new ArgumentException("O curso não pode ser nulo.");
+            if(string.IsNullOrEmpty(course.Title))
+                throw new ArgumentException("O título não pode ser nulo.");
+            if(string.IsNullOrEmpty(course.Description))
+                throw new ArgumentException("A descrição não pode ser nula.");
+            if(string.IsNullOrEmpty(course.Category))
+                throw new ArgumentException("A categoria não pode ser nula.");
+            if(course.Workload <= 0)
+                throw new ArgumentException("A carga horária deve ser maior que zero.");
+
+            Title = course.Title;
+            Description = course.Description;
+            Category = course.Category;
+            Workload = course.Workload;                
+        }
+
+        #endregion
+
 
     }
 }
