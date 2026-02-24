@@ -7,6 +7,7 @@ using Sky.Api.Application.Interfaces;
 using Sky.Api.Domain.Entities;
 using Sky.Api.Endpoints;
 using Sky.Api.Infrastructure.Data;
+using Sky.Api.Infrastructure.Middlewares;
 using Sky.Api.Infrastructure.Repositories;
 using Sky.Api.Infrastructure.Services;
 using System.Text;
@@ -144,6 +145,9 @@ namespace Sky.Api
 
             #endregion
 
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails(); 
+
             #region Registro de Serviços 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
@@ -176,6 +180,8 @@ namespace Sky.Api
             }
 
             #endregion
+
+            app.UseExceptionHandler();
 
             if (app.Environment.IsDevelopment())
             {

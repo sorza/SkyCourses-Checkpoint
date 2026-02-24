@@ -14,17 +14,10 @@ namespace Sky.Api.Infrastructure.Services
                 return new Response<CourseResponse>(null, 400, "Preencha as informações do curso.");
 
             Course course;
+            
+            course = Course.Create(request.Title, request.Description, request.Category, request.Workload);   
 
-            try
-            {
-                course = Course.Create(request.Title, request.Description, request.Category, request.Workload);               
-            }
-            catch(ArgumentException ex)
-            {
-                return new Response<CourseResponse>(null, 400, ex.Message);
-            }           
-
-            await repository.CreateAsync(course, cancellationToken);    
+            await repository.CreateAsync(course, cancellationToken);
 
             var response = new CourseResponse
             (
@@ -36,7 +29,7 @@ namespace Sky.Api.Infrastructure.Services
                 course.CreatedAt
             );
 
-            return new Response<CourseResponse>(response,201,"Curso cadastrado com sucesso!");
+            return new Response<CourseResponse>(response, 201, "Curso cadastrado com sucesso!");
 
         }
 
@@ -57,7 +50,7 @@ namespace Sky.Api.Infrastructure.Services
         {
             if (request is null)
                 return new PagedResponse<IEnumerable<CourseResponse>>(null, 400, "Parâmetros de pesquisa inválidos");
-           
+
             if (request.PageNumber < 1)
                 return new PagedResponse<IEnumerable<CourseResponse>>(null, 400, "O número da página deve ser maior que zero.");
 
@@ -66,57 +59,50 @@ namespace Sky.Api.Infrastructure.Services
 
             IEnumerable<Course>? courses;
 
-            try
-            {               
-                if (!string.IsNullOrWhiteSpace(request.Category))
-                {
-                    courses = await repository.GetAllAsync(
-                        c => c.Category.ToLower() == request.Category.ToLower(),
-                        cancellationToken
-                    );
-                }
-                else
-                {                  
-                    courses = await repository.GetAllAsync(cancellationToken);
-                }
 
-                if (courses is null || !courses.Any())
-                    return new PagedResponse<IEnumerable<CourseResponse>>(
-                        new List<CourseResponse>(),
-                        200,
-                        "Nenhum curso encontrado."
-                    );
-              
-                var totalRecords = courses.Count();
-              
-                var pagedCourses = courses
-                    .Skip((request.PageNumber - 1) * request.PageSize)
-                    .Take(request.PageSize)
-                    .Select(c => new CourseResponse(
-                        c.Id,
-                        c.Title,
-                        c.Description,
-                        c.Category,
-                        c.Workload,
-                        c.CreatedAt
-                    ))
-                    .ToList();
-
-                return new PagedResponse<IEnumerable<CourseResponse>>(
-                    pagedCourses,
-                    totalRecords,
-                    request.PageNumber,
-                    request.PageSize
+            if (!string.IsNullOrWhiteSpace(request.Category))
+            {
+                courses = await repository.GetAllAsync(
+                    c => c.Category.ToLower() == request.Category.ToLower(),
+                    cancellationToken
                 );
             }
-            catch (Exception ex)
+            else
+            {
+                courses = await repository.GetAllAsync(cancellationToken);
+            }
+
+            if (courses is null || !courses.Any())
             {
                 return new PagedResponse<IEnumerable<CourseResponse>>(
-                    null,
-                    500,
-                    $"Erro ao buscar cursos: {ex.Message}"
+                    new List<CourseResponse>(),
+                    200,
+                    "Nenhum curso encontrado."
                 );
             }
+
+            var totalRecords = courses.Count();
+
+            var pagedCourses = courses
+                .Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(c => new CourseResponse(
+                    c.Id,
+                    c.Title,
+                    c.Description,
+                    c.Category,
+                    c.Workload,
+                    c.CreatedAt
+                ))
+                .ToList();
+
+            return new PagedResponse<IEnumerable<CourseResponse>>(
+                pagedCourses,
+                totalRecords,
+                request.PageNumber,
+                request.PageSize
+            );
+
         }
 
         public async Task<Response<CourseResponse>> GetCourseByIdAsync(int id, CancellationToken cancellationToken = default)
