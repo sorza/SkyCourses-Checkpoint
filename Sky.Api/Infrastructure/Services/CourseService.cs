@@ -40,9 +40,17 @@ namespace Sky.Api.Infrastructure.Services
 
         }
 
-        public Task<Response<bool>> DeleteCourseAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<Response<CourseResponse>> DeleteCourseAsync(int id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var course = await repository.GetByIdAsync(id, cancellationToken);
+
+            if (course is null)
+                return new Response<CourseResponse>(null, 404, "Curso não encontrado.");
+
+            await repository.DeleteAsync(id, cancellationToken);
+
+            return new Response<CourseResponse>(null, 204);
+
         }
 
         public async Task<PagedResponse<IEnumerable<CourseResponse>>> GetAllCoursesAsync(GetCoursesRequest request, CancellationToken cancellationToken = default)

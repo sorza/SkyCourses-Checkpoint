@@ -17,7 +17,8 @@
                 .MapEndpoint<Courses.Create>()
                 .MapEndpoint<Courses.GetAll>()
                 .MapEndpoint<Courses.GetById>()
-                .MapEndpoint<Courses.Update>();
+                .MapEndpoint<Courses.Update>()
+                .MapEndpoint<Courses.Delete>();
         }
 
         private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
