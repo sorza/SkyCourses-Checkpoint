@@ -17,6 +17,10 @@ namespace Sky.Api.Infrastructure.Data.Mappings
                 .IsRequired()
                 .HasMaxLength(450);
 
+            builder.Property(s => s.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
             builder.Property(s => s.RegistratedAt)
                 .IsRequired();
 
